@@ -1,31 +1,22 @@
 import 'package:flutter/widgets.dart';
 
+import '../models/user_model.dart';
+
 enum AuthStatus {
   uninitialized,
   authenticated,
   unauthenticated,
 }
 
-class User {
-  final String? name;
-  final String? email;
-  final String? id;
-  User({
-    this.name,
-    this.email,
-    this.id,
-  });
-}
-
 class AuthAPI extends ChangeNotifier {
   // late final Account account;
 
-  User? _currentUser;
+  UserModel? _currentUser;
 
   AuthStatus _status = AuthStatus.uninitialized;
 
   // Getter methods
-  User? get currentUser => _currentUser;
+  UserModel? get currentUser => _currentUser;
   AuthStatus get status => _status;
   String? get username => _currentUser?.name;
   String? get email => _currentUser?.email;
