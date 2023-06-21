@@ -1,6 +1,6 @@
 import 'api.dart';
 
-class ContactsApiImp implements ContactsApi {
+class ContactsService implements ContactsApi {
   final String url = 'https://connections-api.herokuapp.com/';
 
   @override

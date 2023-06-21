@@ -1,4 +1,4 @@
-import 'package:phonebook_auth/providers/auth_api.dart';
+import 'package:phonebook_auth/providers/auth_provider.dart';
 import 'package:phonebook_auth/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,8 +31,8 @@ class _LoginPageState extends State<LoginPage> {
         });
 
     try {
-      final AuthAPI appwrite = context.read<AuthAPI>();
-      await appwrite.createEmailSession(
+      final AuthProvider authProvider = context.read<AuthProvider>();
+      await authProvider.login(
         email: emailTextController.text,
         password: passwordTextController.text,
       );

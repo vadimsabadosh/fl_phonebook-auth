@@ -1,4 +1,4 @@
-import 'package:phonebook_auth/providers/auth_api.dart';
+import 'package:phonebook_auth/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +12,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+  final nameTextController = TextEditingController();
 
   createAccount() async {
     showDialog(
@@ -28,11 +29,11 @@ class _RegisterPageState extends State<RegisterPage> {
           );
         });
     try {
-      final AuthAPI appwrite = context.read<AuthAPI>();
-      await appwrite.createUser(
-        email: emailTextController.text,
-        password: passwordTextController.text,
-      );
+      final AuthProvider appwrite = context.read<AuthProvider>();
+      await appwrite.register(
+          email: emailTextController.text,
+          password: passwordTextController.text,
+          name: nameTextController.text);
       Navigator.pop(context);
       const snackbar = SnackBar(content: Text('Account created!'));
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
@@ -73,6 +74,14 @@ class _RegisterPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              TextField(
+                controller: nameTextController,
+                decoration: const InputDecoration(
+                  labelText: 'Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16),
               TextField(
                 controller: emailTextController,
                 decoration: const InputDecoration(
