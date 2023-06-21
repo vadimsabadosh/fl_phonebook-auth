@@ -1,4 +1,3 @@
-import 'dart:js_interop';
 import 'package:flutter/widgets.dart';
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
@@ -26,9 +25,9 @@ class AuthProvider extends ChangeNotifier {
   loadUser() async {
     try {
       final user = await authService.getCurrentUser();
-      if (user.isDefinedAndNotNull) {
+      if (user != null) {
         _status = AuthStatus.authenticated;
-        _currentUser = user?.user;
+        _currentUser = user.user;
       } else {
         _status = AuthStatus.unauthenticated;
         _currentUser = null;
@@ -62,8 +61,10 @@ class AuthProvider extends ChangeNotifier {
         password: password,
         name: name,
       );
-      _status = AuthStatus.authenticated;
-      _currentUser = user.user;
+      if (user != null) {
+        _status = AuthStatus.authenticated;
+        _currentUser = user.user;
+      }
     } catch (e) {
       _status = AuthStatus.unauthenticated;
       throw Exception(e);

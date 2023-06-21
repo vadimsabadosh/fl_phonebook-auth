@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'dart:js_interop';
-
 import 'package:phonebook_auth/models/auth_response.dart';
-
 import 'api.dart';
 import "package:http/http.dart" as http;
 
@@ -11,8 +8,8 @@ import 'sercure_storage_service.dart';
 class AuthService implements AuthApi {
   final String url = 'https://connections-api.herokuapp.com/users';
 
-  saveToken(String? token) {
-    SecureStorageService.storage
+  saveToken(String? token) async {
+    await SecureStorageService.storage
         .write(key: SecureStorageService.key, value: token);
   }
 
@@ -54,8 +51,8 @@ class AuthService implements AuthApi {
   @override
   Future<AuthResponse?> getCurrentUser() async {
     var token =
-        SecureStorageService.storage.read(key: SecureStorageService.key);
-    if (token.isNull) {
+        await SecureStorageService.storage.read(key: SecureStorageService.key);
+    if (token == null) {
       return null;
     }
     return _loadUser(token.toString());
@@ -64,8 +61,8 @@ class AuthService implements AuthApi {
   @override
   Future<void> logout() async {
     var token =
-        SecureStorageService.storage.read(key: SecureStorageService.key);
-    if (token.isNull) {
+        await SecureStorageService.storage.read(key: SecureStorageService.key);
+    if (token == null) {
       throw Exception('No token provided');
     }
     Uri loginUrl = Uri.parse('$url/logout');
@@ -78,7 +75,7 @@ class AuthService implements AuthApi {
   }
 
   @override
-  Future<AuthResponse> register(
+  Future<AuthResponse?> register(
       {required String email,
       required String password,
       required String name}) async {
@@ -88,8 +85,12 @@ class AuthService implements AuthApi {
       headers: buildHeaders(),
       body: jsonEncode({"email": email, "password": password, "name": name}),
     );
-    AuthResponse decoded = AuthResponse.fromJson(jsonDecode(response.body));
-    saveToken(decoded.token);
-    return decoded;
+    if (response.statusCode == 201) {
+      AuthResponse decoded = AuthResponse.fromJson(jsonDecode(response.body));
+      saveToken(decoded.token);
+      return decoded;
+    }
+
+    throw Exception('Failed to register');
   }
 }

@@ -1,8 +1,8 @@
 import 'package:phonebook_auth/pages/login_page.dart';
-import 'package:phonebook_auth/pages/phonebook_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'pages/tabs_page.dart';
 import 'providers/auth_provider.dart';
 
 void main() {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     AuthStatus.uninitialized: const Scaffold(
       body: Center(child: CircularProgressIndicator()),
     ),
-    AuthStatus.authenticated: const PhonebookPage(),
+    AuthStatus.authenticated: const TabsPage(),
     AuthStatus.unauthenticated: const LoginPage()
   };
 
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final value = context.watch<AuthProvider>().status;
     return MaterialApp(
-        title: 'Appwrite Auth Demo',
+        title: 'Phonebook Auth Demo',
         debugShowCheckedModeBanner: false,
         home: screens[value],
         theme: ThemeData(

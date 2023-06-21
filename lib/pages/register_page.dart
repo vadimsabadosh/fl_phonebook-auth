@@ -19,24 +19,25 @@ class _RegisterPageState extends State<RegisterPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return Dialog(
+          return const Dialog(
             backgroundColor: Colors.transparent,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
+                children: [
                   CircularProgressIndicator(),
                 ]),
           );
         });
     try {
-      final AuthProvider appwrite = context.read<AuthProvider>();
-      await appwrite.register(
+      final AuthProvider authProvider = context.read<AuthProvider>();
+      await authProvider.register(
           email: emailTextController.text,
           password: passwordTextController.text,
           name: nameTextController.text);
       Navigator.pop(context);
       const snackbar = SnackBar(content: Text('Account created!'));
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      Navigator.pop(context);
     } catch (e) {
       Navigator.pop(context);
       showAlert(title: 'Account creation failed', text: e.toString());
