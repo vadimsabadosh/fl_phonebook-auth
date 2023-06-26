@@ -9,8 +9,12 @@ class AuthService implements AuthApi {
   final String url = 'https://connections-api.herokuapp.com/users';
 
   saveToken(String? token) async {
-    await SecureStorageService.storage
-        .write(key: SecureStorageService.key, value: token);
+    try {
+      await SecureStorageService.storage
+          .write(key: SecureStorageService.key, value: token);
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   Map<String, String> buildHeaders({String? accessToken}) {

@@ -4,10 +4,20 @@ import 'package:provider/provider.dart';
 
 import 'pages/tabs_page.dart';
 import 'providers/auth_provider.dart';
+import 'providers/contacts_provider.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (context) => AuthProvider(), child: MyApp()));
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => AuthProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (context) => ContactsProvider(),
+      ),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

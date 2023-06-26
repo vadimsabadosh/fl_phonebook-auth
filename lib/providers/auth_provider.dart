@@ -9,7 +9,7 @@ enum AuthStatus {
 }
 
 class AuthProvider extends ChangeNotifier {
-  AuthService authService = AuthService();
+  final AuthService _authService = AuthService();
   UserModel? _currentUser;
   AuthStatus _status = AuthStatus.uninitialized;
 
@@ -24,7 +24,7 @@ class AuthProvider extends ChangeNotifier {
 
   loadUser() async {
     try {
-      final user = await authService.getCurrentUser();
+      final user = await _authService.getCurrentUser();
       if (user != null) {
         _status = AuthStatus.authenticated;
         _currentUser = user.user;
@@ -41,7 +41,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> login({required String email, required String password}) async {
     try {
-      var resp = await authService.login(email: email, password: password);
+      var resp = await _authService.login(email: email, password: password);
       _currentUser = resp.user;
       _status = AuthStatus.authenticated;
     } catch (e) {
@@ -56,7 +56,7 @@ class AuthProvider extends ChangeNotifier {
       required String password,
       required String name}) async {
     try {
-      final user = await authService.register(
+      final user = await _authService.register(
         email: email,
         password: password,
         name: name,
@@ -75,7 +75,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> logout() async {
     try {
-      await authService.logout();
+      await _authService.logout();
       _status = AuthStatus.unauthenticated;
     } catch (e) {
       throw Exception(e);

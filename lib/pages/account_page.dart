@@ -31,7 +31,11 @@ class _AccountPageState extends State<AccountPage> {
 
   signOut() {
     final AuthProvider authProvider = context.read<AuthProvider>();
-    authProvider.logout();
+    try {
+      authProvider.logout();
+    } catch (e) {
+      showAlert(text: e.toString(), title: 'Logout Erorr');
+    }
   }
 
   @override
@@ -81,5 +85,23 @@ class _AccountPageState extends State<AccountPage> {
                 ],
               )),
         ));
+  }
+
+  showAlert({required String title, required String text}) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(text),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Ok'))
+            ],
+          );
+        });
   }
 }
