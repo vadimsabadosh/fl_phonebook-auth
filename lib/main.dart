@@ -1,21 +1,12 @@
-import 'package:phonebook_auth/pages/login_page.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:phonebook_auth/ui/pages/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'pages/tabs_page.dart';
-import 'providers/auth_provider.dart';
-import 'providers/contacts_provider.dart';
+import 'redux/store/store.dart';
+import 'ui/pages/tabs_page.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(
-        create: (context) => AuthProvider(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => ContactsProvider(),
-      ),
-    ],
+  runApp(StoreProvider(
+    store: store,
     child: MyApp(),
   ));
 }
@@ -23,17 +14,16 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final Map<AuthStatus, StatefulWidget> screens = {
-    AuthStatus.uninitialized: const Scaffold(
+  final Map<String, StatefulWidget> screens = {
+    "uninitialized": const Scaffold(
       body: Center(child: CircularProgressIndicator()),
     ),
-    AuthStatus.authenticated: const TabsPage(),
-    AuthStatus.unauthenticated: const LoginPage()
+    "authenticated": const TabsPage(),
+    "unauthenticated": const LoginPage()
   };
-
   @override
   Widget build(BuildContext context) {
-    final value = context.watch<AuthProvider>().status;
+    var value = "unauthenticated";
     return MaterialApp(
         title: 'Phonebook Auth Demo',
         debugShowCheckedModeBanner: false,

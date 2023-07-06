@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:phonebook_auth/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class AccountPage extends StatefulWidget {
@@ -17,9 +16,6 @@ class _AccountPageState extends State<AccountPage> {
   @override
   void initState() {
     super.initState();
-    final AuthProvider authProvider = context.read<AuthProvider>();
-    email = authProvider.email;
-    username = authProvider.username;
   }
 
   savePreferences() {
@@ -30,9 +26,8 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   signOut() {
-    final AuthProvider authProvider = context.read<AuthProvider>();
     try {
-      authProvider.logout();
+      // authProvider.logout();
     } catch (e) {
       showAlert(text: e.toString(), title: 'Logout Erorr');
     }

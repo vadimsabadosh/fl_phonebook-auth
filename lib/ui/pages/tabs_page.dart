@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phonebook_auth/pages/phonebook_page.dart';
+import 'package:phonebook_auth/ui/pages/phonebook_page.dart';
 import 'account_page.dart';
 
 class TabsPage extends StatefulWidget {

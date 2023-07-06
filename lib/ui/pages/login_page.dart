@@ -1,20 +1,20 @@
-import 'package:phonebook_auth/providers/auth_provider.dart';
+import 'package:phonebook_auth/ui/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
-  final nameTextController = TextEditingController();
+  bool loading = false;
 
-  createAccount() async {
+  signIn() async {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -28,19 +28,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 ]),
           );
         });
+
     try {
-      final AuthProvider authProvider = context.read<AuthProvider>();
-      await authProvider.register(
-          email: emailTextController.text,
-          password: passwordTextController.text,
-          name: nameTextController.text);
-      Navigator.pop(context);
-      const snackbar = SnackBar(content: Text('Account created!'));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+      // final AuthProvider authProvider = context.read<AuthProvider>();
+      // await authProvider.login(
+      //   email: emailTextController.text,
+      //   password: passwordTextController.text,
+      // );
       Navigator.pop(context);
     } catch (e) {
       Navigator.pop(context);
-      showAlert(title: 'Account creation failed', text: e.toString());
+      showAlert(title: 'Login failed', text: e.toString());
     }
   }
 
@@ -62,11 +60,19 @@ class _RegisterPageState extends State<RegisterPage> {
         });
   }
 
+  signInWithProvider(String provider) {
+    // try {
+    //   context.read<AuthAPI>().signInWithProvider(provider: provider);
+    // } on AppwriteException catch (e) {
+    //   showAlert(title: 'Login failed', text: e.message.toString());
+    // }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create your account'),
+        title: const Text('Sign In'),
       ),
       body: Center(
         child: Padding(
@@ -76,15 +82,8 @@ class _RegisterPageState extends State<RegisterPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextField(
-                controller: nameTextController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
                 controller: emailTextController,
+                keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
@@ -102,10 +101,19 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () {
-                  createAccount();
+                  signIn();
                 },
-                icon: const Icon(Icons.app_registration),
-                label: const Text('Sign up'),
+                icon: const Icon(Icons.login),
+                label: const Text("Sign in"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterPage()));
+                },
+                child: const Text('Create Account'),
               ),
             ],
           ),

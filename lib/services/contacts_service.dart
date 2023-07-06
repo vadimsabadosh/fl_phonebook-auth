@@ -20,6 +20,7 @@ class ContactsService implements ContactsApi {
   Future<String> _getToken() async {
     var token =
         await SecureStorageService.storage.read(key: SecureStorageService.key);
+    print('token from storage: $token');
     if (token == null) {
       throw Exception('No token provided');
     }
@@ -61,8 +62,8 @@ class ContactsService implements ContactsApi {
 
   @override
   Future<List<ContactModel>> getContacts() async {
+    print('start getContacts');
     var token = await _getToken();
-
     var response = await http.get(
       Uri.parse(url),
       headers: _buildHeaders(accessToken: token),

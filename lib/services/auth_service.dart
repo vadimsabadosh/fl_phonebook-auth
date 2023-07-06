@@ -48,6 +48,7 @@ class AuthService implements AuthApi {
       headers: buildHeaders(accessToken: token),
     );
     AuthResponse decoded = AuthResponse.fromJson(jsonDecode(response.body));
+    print('decoded.token ${decoded.user}');
     saveToken(decoded.token);
     return decoded;
   }
@@ -56,6 +57,7 @@ class AuthService implements AuthApi {
   Future<AuthResponse?> getCurrentUser() async {
     var token =
         await SecureStorageService.storage.read(key: SecureStorageService.key);
+    print('token auth: $token ');
     if (token == null) {
       return null;
     }
