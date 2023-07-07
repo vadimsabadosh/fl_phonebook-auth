@@ -28,7 +28,7 @@ class AuthService implements AuthApi {
   }
 
   @override
-  Future<AuthResponse> login(
+  Future<AuthResponse?> login(
       {required String email, required String password}) async {
     Uri loginUrl = Uri.parse('$url/login');
     var response = await http.post(
@@ -36,9 +36,13 @@ class AuthService implements AuthApi {
       headers: buildHeaders(),
       body: jsonEncode({"email": email, "password": password}),
     );
-    AuthResponse decoded = AuthResponse.fromJson(jsonDecode(response.body));
-    saveToken(decoded.token);
-    return decoded;
+    print('response.statusCode ${response.statusCode}');
+    if (response.statusCode == 200) {
+      AuthResponse decoded = AuthResponse.fromJson(jsonDecode(response.body));
+      saveToken(decoded.token);
+      return decoded;
+    }
+    return null;
   }
 
   Future<AuthResponse> _loadUser(String token) async {
@@ -48,7 +52,6 @@ class AuthService implements AuthApi {
       headers: buildHeaders(accessToken: token),
     );
     AuthResponse decoded = AuthResponse.fromJson(jsonDecode(response.body));
-    print('decoded.token ${decoded.user}');
     saveToken(decoded.token);
     return decoded;
   }

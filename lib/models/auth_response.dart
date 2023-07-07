@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'user_model.dart';
 
 class AuthResponse {
@@ -17,4 +18,7 @@ class AuthResponse {
         'user': user?.toJson(),
         'token': token,
       };
+
+  @override
+  String toString() => 'AuthResponse(user: $user, token: $token)';
 }

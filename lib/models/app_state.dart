@@ -2,56 +2,30 @@
 import 'dart:convert';
 
 import 'package:meta/meta.dart';
+import 'package:phonebook_auth/models/auth_response.dart';
 
+import 'auth_state.dart';
 import 'contact_model.dart';
 import 'user_model.dart';
 
 @immutable
 class AppState {
-  final UserModel user;
+  final AuthState auth;
   final List<ContactModel> contacts;
   const AppState({
-    required this.user,
+    required this.auth,
     required this.contacts,
   });
 
-  factory AppState.init() => AppState(user: UserModel.init(), contacts: []);
-
-  @override
-  String toString() {
-    return 'MyBoxColor: ${JsonEncoder.withIndent('  ').convert(this)}';
-  }
+  factory AppState.init() => AppState(auth: AuthState.init(), contacts: []);
 
   AppState copyWith({
     UserModel? user,
     List<ContactModel>? contacts,
   }) {
     return AppState(
-      user: user ?? this.user,
+      auth: auth ?? this.auth,
       contacts: contacts ?? this.contacts,
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'user': user.toJson(),
-      'contacts': contacts.map((x) => x.toJson()).toList(),
-    };
-  }
-
-  factory AppState.fromMap(Map<String, dynamic> map) {
-    return AppState(
-      user: UserModel.fromJson(map['user'] as Map<String, dynamic>),
-      contacts: List<ContactModel>.from(
-        (map['contacts'] as List<int>).map<ContactModel>(
-          (x) => ContactModel.fromJson(x as Map<String, dynamic>),
-        ),
-      ),
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory AppState.fromJson(String source) =>
-      AppState.fromMap(json.decode(source) as Map<String, dynamic>);
 }

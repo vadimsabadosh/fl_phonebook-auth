@@ -1,26 +1,63 @@
+import 'package:phonebook_auth/models/app_state.dart';
 import 'package:phonebook_auth/models/auth_response.dart';
+import 'package:phonebook_auth/services/auth_service.dart';
+import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
-// ThunkAction<AppState> getBoxColor(Completer completer) {
-//   return (Store<AppState> store) async {
-//     try {
-//       MyBoxColor boxColor = await ApiClient.getBoxColor();
-//       store.dispatch(SetColor(boxColor));
-//       completer.complete();
-//     } on ColorException catch (e) {
-//       completer.completeError(e);
-//     }
-//   };
-// }
+ThunkAction<AppState> loginAction(String email, String password) {
+  return (Store<AppState> store) async {
+    try {
+      store.dispatch(UserPendingAction());
+      AuthResponse? response =
+          await AuthService().login(email: email, password: password);
+      if (response != null) {
+        store.dispatch(UserSuccessAction(response));
+        return;
+      }
+      store.dispatch(UserErrorAction('Login failed'));
+    } catch (e) {
+      store.dispatch(UserErrorAction(e.toString()));
+    }
+  };
+}
 
-class LoginAction {
-  final AuthResponse _loginResponse;
+ThunkAction<AppState> getCurrentUserAction() {
+  return (Store<AppState> store) async {
+    try {
+      store.dispatch(UserPendingAction());
+      AuthResponse? response = await AuthService().getCurrentUser();
+      print('getCurrentUserAction response $response');
+      if (response != null) {
+        store.dispatch(UserSuccessAction(response));
+        return;
+      }
+      store.dispatch(UserErrorAction('No user'));
+    } catch (e) {
+      store.dispatch(UserErrorAction(e.toString()));
+    }
+  };
+}
 
-  LoginAction({loginResponse}) : this._loginResponse = loginResponse;
+class UserSuccessAction {
+  final AuthResponse response;
 
-  AuthResponse get loginResponse => _loginResponse;
+  UserSuccessAction(this.response);
 
   @override
   String toString() {
-    return 'LoginResponseAction{_loginResponse: $_loginResponse}';
+    return 'UserSuccessAction{response: $response}';
   }
 }
+
+class UserErrorAction {
+  final String error;
+
+  UserErrorAction(this.error);
+
+  @override
+  String toString() {
+    return 'UserErrorAction{error: $error}';
+  }
+}
+
+class UserPendingAction {}

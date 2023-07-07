@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:phonebook_auth/models/app_state.dart';
+import 'package:phonebook_auth/ui/widgets/alert.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -9,8 +11,6 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  late String? email;
-  late String? username;
   TextEditingController bioTextController = TextEditingController();
 
   @override
@@ -18,23 +18,18 @@ class _AccountPageState extends State<AccountPage> {
     super.initState();
   }
 
-  savePreferences() {
-    // final AuthProvider authProvider = context.read<AuthProvider>();
-    // appwrite.updatePreferences(bio: bioTextController.text);
-    const snackbar = SnackBar(content: Text('Preferences updated!'));
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-  }
-
   signOut() {
     try {
       // authProvider.logout();
     } catch (e) {
-      showAlert(text: e.toString(), title: 'Logout Erorr');
+      showAlert(text: e.toString(), title: 'Logout Erorr', context: context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    var user = StoreProvider.of<AppState>(context).state.auth.user;
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('My Account'),
@@ -54,9 +49,9 @@ class _AccountPageState extends State<AccountPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Welcome back $username!',
+                  Text('Welcome back ${user?.name}!',
                       style: Theme.of(context).textTheme.headlineSmall),
-                  Text('$email'),
+                  Text("${user?.email}"),
                   const SizedBox(height: 40),
                   Card(
                     child: Padding(
@@ -69,34 +64,11 @@ class _AccountPageState extends State<AccountPage> {
                             border: OutlineInputBorder(),
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        TextButton(
-                          onPressed: () => savePreferences(),
-                          child: const Text('Save Preferences'),
-                        ),
                       ]),
                     ),
                   )
                 ],
               )),
         ));
-  }
-
-  showAlert({required String title, required String text}) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(text),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Ok'))
-            ],
-          );
-        });
   }
 }

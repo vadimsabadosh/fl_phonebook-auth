@@ -1,6 +1,8 @@
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:phonebook_auth/models/app_state.dart';
+import 'package:phonebook_auth/redux/actions/actions.dart';
 import 'package:phonebook_auth/ui/pages/register_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -28,44 +30,12 @@ class _LoginPageState extends State<LoginPage> {
                 ]),
           );
         });
-
-    try {
-      // final AuthProvider authProvider = context.read<AuthProvider>();
-      // await authProvider.login(
-      //   email: emailTextController.text,
-      //   password: passwordTextController.text,
-      // );
-      Navigator.pop(context);
-    } catch (e) {
-      Navigator.pop(context);
-      showAlert(title: 'Login failed', text: e.toString());
-    }
-  }
-
-  showAlert({required String title, required String text}) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(text),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Ok'))
-            ],
-          );
-        });
-  }
-
-  signInWithProvider(String provider) {
-    // try {
-    //   context.read<AuthAPI>().signInWithProvider(provider: provider);
-    // } on AppwriteException catch (e) {
-    //   showAlert(title: 'Login failed', text: e.message.toString());
-    // }
+    final store = StoreProvider.of<AppState>(context);
+    await store.dispatch(loginAction(
+      emailTextController.text,
+      passwordTextController.text,
+    ));
+    Navigator.pop(context);
   }
 
   @override
