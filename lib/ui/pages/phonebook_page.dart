@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../models/contact_model.dart';
 import '../widgets/contact_form.dart';
 import '../widgets/contact_list.dart';
-import 'package:provider/provider.dart';
 
 class PhonebookPage extends StatefulWidget {
   const PhonebookPage({Key? key}) : super(key: key);

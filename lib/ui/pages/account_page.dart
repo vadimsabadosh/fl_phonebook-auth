@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:phonebook_auth/models/app_state.dart';
 import 'package:phonebook_auth/ui/widgets/alert.dart';
 
 class AccountPage extends StatefulWidget {
@@ -28,8 +26,6 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    var user = StoreProvider.of<AppState>(context).state.auth.user;
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('My Account'),
@@ -49,9 +45,9 @@ class _AccountPageState extends State<AccountPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Welcome back ${user?.name}!',
+                  Text('Welcome back user?.name!',
                       style: Theme.of(context).textTheme.headlineSmall),
-                  Text("${user?.email}"),
+                  Text("user?.email"),
                   const SizedBox(height: 40),
                   Card(
                     child: Padding(

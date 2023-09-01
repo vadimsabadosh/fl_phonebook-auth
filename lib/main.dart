@@ -1,18 +1,11 @@
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:phonebook_auth/models/auth_state.dart';
-import 'package:phonebook_auth/redux/actions/actions.dart';
 import 'package:phonebook_auth/ui/pages/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
 import 'models/app_state.dart';
-import 'redux/store/store.dart';
 import 'ui/pages/tabs_page.dart';
 
 void main() {
-  runApp(StoreProvider(
-    store: store,
-    child: const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -63,9 +56,7 @@ class _ViewModel {
   factory _ViewModel.fromStore(Store<AppState> store) {
     return _ViewModel(
       status: store.state.auth.status!,
-      getUser: () {
-        store.dispatch(getCurrentUserAction());
-      },
+      getUser: () {},
     );
   }
 }

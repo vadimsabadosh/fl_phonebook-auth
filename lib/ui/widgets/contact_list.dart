@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import '../../models/contact_model.dart';
 import 'contact.dart';
-import 'package:provider/provider.dart';
 
 class ContactList extends StatelessWidget {
   final List contacts = [];

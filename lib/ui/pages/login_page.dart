@@ -1,6 +1,3 @@
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:phonebook_auth/models/app_state.dart';
-import 'package:phonebook_auth/redux/actions/actions.dart';
 import 'package:phonebook_auth/ui/pages/register_page.dart';
 import 'package:flutter/material.dart';
 
@@ -30,11 +27,7 @@ class _LoginPageState extends State<LoginPage> {
                 ]),
           );
         });
-    final store = StoreProvider.of<AppState>(context);
-    await store.dispatch(loginAction(
-      emailTextController.text,
-      passwordTextController.text,
-    ));
+
     Navigator.pop(context);
   }
 

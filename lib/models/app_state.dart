@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
 import 'package:meta/meta.dart';
-import 'package:phonebook_auth/models/auth_response.dart';
 
 import 'auth_state.dart';
 import 'contact_model.dart';
@@ -17,7 +15,8 @@ class AppState {
     required this.contacts,
   });
 
-  factory AppState.init() => AppState(auth: AuthState.init(), contacts: []);
+  factory AppState.init() =>
+      AppState(auth: AuthState.init(), contacts: const []);
 
   AppState copyWith({
     UserModel? user,

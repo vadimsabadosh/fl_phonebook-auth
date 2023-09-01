@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../models/contact_model.dart';
 
 class Contact extends StatelessWidget {
